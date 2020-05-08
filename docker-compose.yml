@@ -1,0 +1,15 @@
+version: "3"
+services:
+  backend:
+    build: .
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
