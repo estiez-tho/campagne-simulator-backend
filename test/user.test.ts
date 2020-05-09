@@ -45,4 +45,24 @@ describe("/user endpoints", () => {
     const res = await request(app).get(`/user/unknown`);
     expect(res.statusCode).toEqual(404);
   });
+
+  // POST /user/:id/purchase with correct purchases
+  it("Should purchase item 0", async () => {
+    const payload = {
+      purchases: [{ itemId: 0, purchaseTime: new Date() }],
+    };
+    const res = await request(app)
+      .post(`/user/${userId}/purchase`)
+      .send(payload);
+    expect(res.statusCode).toEqual(200);
+  });
+
+  // POST /user/:id/purchase with incorrect purchases
+  it("Should purchase item 0", async () => {
+    const payload = {};
+    const res = await request(app)
+      .post(`/user/${userId}/purchase`)
+      .send(payload);
+    expect(res.statusCode).toEqual(400);
+  });
 });
