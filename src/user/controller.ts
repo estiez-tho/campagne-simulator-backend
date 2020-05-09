@@ -1,6 +1,4 @@
 import { UserInfo, UserCreationData, UserInfoModel } from "./model";
-import { getDbCreationData } from "../utils";
-import mongoose from "mongoose";
 
 // GET routes
 export async function getUserInfo(id: string): Promise<UserInfo> {

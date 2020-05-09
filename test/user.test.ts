@@ -1,7 +1,6 @@
 import request from "supertest";
 import mongoose from "mongoose";
 import app from "../src/server";
-import { USER_INFO } from "../mock/user";
 
 beforeAll(async () => {
   const mongoUrl = process.env.MONGO_URL;
@@ -23,10 +22,8 @@ describe("/user endpoints", () => {
 
   // POST /user/create with required body
   it("Should create a user in the db and return the UserInfo", async () => {
-    const { username, email } = USER_INFO;
-    const res = await request(app)
-      .post("/user/create")
-      .send({ username, email });
+    const payload = { username: "test", email: "test@gmail.com" };
+    const res = await request(app).post("/user/create").send(payload);
     expect(res.statusCode).toEqual(200);
     userId = res.body._id;
   });

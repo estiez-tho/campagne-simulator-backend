@@ -3,7 +3,7 @@ import { getUserInfo, createUser } from "./controller";
 import { UserCreationDataJoiSchema, UserInfoJoiSchema } from "./model";
 import createError from "http-errors";
 import { validateModel } from "../validation";
-import { getDbCreationData } from "../utils";
+import { getUserCreationData } from "../utils";
 
 const userRouter: Router = Router();
 
@@ -32,7 +32,7 @@ userRouter.post(
     try {
       validateModel(req.body, UserCreationDataJoiSchema);
 
-      const dbCreationData = getDbCreationData(req.body);
+      const dbCreationData = getUserCreationData(req.body);
 
       validateModel(dbCreationData, UserInfoJoiSchema);
 
