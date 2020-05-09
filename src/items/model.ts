@@ -6,8 +6,8 @@ export const ItemSchema: Schema = new Schema({
   price: { type: Number, required: true },
   duration: { type: Number, required: true },
   quantity: { type: Number, required: true },
-  progession: { type: Number, required: true },
-  progessionLastUpdated: { type: Date, required: true },
+  progression: { type: Number, required: true },
+  progressionLastUpdated: { type: Date, required: true },
 });
 
 export interface Item {
@@ -25,5 +25,5 @@ export const ItemJoiSchema = Joi.object({
   duration: Joi.number().integer().required().min(0),
   quantity: Joi.number().integer().required().min(0),
   progression: Joi.number().integer().required().min(0),
-  progressionLastUpdated: Joi.Date().required(),
+  progressionLastUpdated: Joi.date().required(),
 });

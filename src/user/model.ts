@@ -2,9 +2,19 @@ import mongoose, { Schema, Document } from "mongoose";
 import { Item, ItemSchema, ItemJoiSchema } from "../items/model";
 import Joi from "@hapi/joi";
 
+export interface UserCreationData {
+  username: string;
+  email: string;
+}
+
+export const UserCreationDataJoiSchema = Joi.object({
+  username: Joi.string().required(),
+  email: Joi.string().email().required(),
+});
+
 export const UserInfoSchema: Schema = new Schema({
   username: { type: String, required: true },
-  email: { type: Number, required: true },
+  email: { type: String, required: true },
   amount: { type: Number, required: true },
   items: { type: Map, of: ItemSchema },
 });
