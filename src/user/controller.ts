@@ -15,9 +15,12 @@ export async function addPurchases(
   purchases: Array<ItemPurchase>
 ): Promise<UserInfo> {
   const user = await UserInfoModel.findById(id);
+
   if (!user) throw new Error("Could not find user");
+
   purchases.forEach((elem) => {
     user.items.get(`${elem.itemId}`).quantity += 1;
   });
+
   return await user.save();
 }
