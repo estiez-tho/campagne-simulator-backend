@@ -9,7 +9,9 @@ export const UserItemSchema: Schema = new Schema({
   duration: { type: Number, required: true },
   quantity: { type: Number, required: true },
   progression: { type: Number, required: true },
+  nextGoal: { type: Number, required: true },
   progressionLastUpdated: { type: Date, required: true },
+  numberOfReachedGoal: { type: Number, required: true },
 });
 
 export interface UserItem extends Document {
@@ -20,6 +22,8 @@ export interface UserItem extends Document {
   quantity: number;
   progression: number;
   progressionLastUpdated: Date;
+  nextGoal: number;
+  numberOfReachedGoal: number;
 }
 
 export const UserItemModel = mongoose.model<UserItem>(
@@ -35,17 +39,6 @@ export const UserItemJoiSchema = Joi.object({
   quantity: Joi.number().integer().required().min(0),
   progression: Joi.number().integer().required().min(0),
   progressionLastUpdated: Joi.date().required(),
-});
-
-export interface ItemPurchase {
-  itemId: number;
-  purchaseTime: Date;
-}
-
-export const ItemPurchaseJoiSchema = Joi.object({
-  itemId: Joi.number()
-    .required()
-    .min(0)
-    .max(Items.length - 1),
-  purchaseTime: Joi.date().required(),
+  nextGoal: Joi.number().integer().required().min(0),
+  numberOfReachedGoal: Joi.number().integer().required().min(0),
 });

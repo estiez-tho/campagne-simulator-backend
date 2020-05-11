@@ -1,10 +1,24 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { getUserInfo, createUser, addPurchases } from "./controller";
-import { UserCreationDataJoiSchema, UserInfoJoiSchema } from "./model";
+import {
+  getUserInfo,
+  createTempUser,
+  updateUserInfo,
+  verifyTempUser,
+  createUser,
+} from "./controller";
+import {
+  UserCreationDataJoiSchema,
+  UserInfoJoiSchema,
+  UserVerificationDataJoiSchema,
+  UserCreationData,
+} from "./model";
 import createError from "http-errors";
 import { validateModel } from "../validation";
-import { getUserCreationData } from "../utils";
-import { ItemPurchase, ItemPurchaseJoiSchema } from "../userItem/model";
+import {
+  getUserInfoCreationData,
+  formatUserInfoForResponse,
+  formatTempUserInfoForResponse,
+} from "../utils";
 
 const userRouter: Router = Router();
 
@@ -17,7 +31,7 @@ userRouter.get(
     const userId = req.params.userId;
     try {
       const userInfo = await getUserInfo(userId);
-      res.json(userInfo);
+      res.json(formatUserInfoForResponse(userInfo));
     } catch (err) {
       next(createError(404, new Error("did not find user in the db")));
     }
@@ -33,13 +47,9 @@ userRouter.post(
     try {
       validateModel(req.body, UserCreationDataJoiSchema);
 
-      const dbCreationData = getUserCreationData(req.body);
+      const createdTempUser = await createTempUser(req.body);
 
-      validateModel(dbCreationData, UserInfoJoiSchema);
-
-      const createdUser = await createUser(dbCreationData);
-
-      res.json(createdUser);
+      res.json(formatTempUserInfoForResponse(createdTempUser));
     } catch (err) {
       next(createError(400, err));
     }
@@ -47,19 +57,41 @@ userRouter.post(
 );
 
 userRouter.post(
-  "/:userId/purchase",
+  "/verify",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      validateModel(req.body, UserVerificationDataJoiSchema);
+
+      const tempUser = await verifyTempUser(req.body);
+
+      const { username, email } = tempUser;
+
+      const userCreationData = getUserInfoCreationData({
+        username,
+        email,
+      } as UserCreationData);
+
+      validateModel(userCreationData, UserInfoJoiSchema);
+
+      const createdUser = await createUser(userCreationData);
+
+      res.json(formatUserInfoForResponse(createdUser));
+    } catch (err) {
+      next(createError(400, err));
+    }
+  }
+);
+
+userRouter.post(
+  "/:userId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      console.log(`POST : ${JSON.stringify(req.body)}`);
       const userId = req.params.userId;
-      const purchases = req.body.purchases;
 
-      if (!purchases) throw new Error("No purchases provided");
-
-      purchases.forEach((p) => {
-        validateModel(p, ItemPurchaseJoiSchema);
-      });
-
-      res.json(await addPurchases(userId, purchases));
+      res.json(
+        formatUserInfoForResponse(await updateUserInfo(userId, req.body))
+      );
     } catch (err) {
       next(createError(400, err));
     }

@@ -1,14 +1,13 @@
 import express, { Router, Request, Response, NextFunction } from "express";
 import createError, { HttpError } from "http-errors";
 import userRouter from "./user/router";
-
+import jwt from "express-jwt";
+import { JwtSecret } from "../config/secret";
 const app: express.Application = express();
 
 app.use(express.json());
 
-app.get("/", function (req, res) {
-  res.send("Hello World!");
-});
+//app.use(jwt({ secret: JwtSecret }).unless({ path: ["/user/create"] }));
 
 app.use("/user", userRouter);
 
