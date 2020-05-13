@@ -32,16 +32,14 @@ export async function createTempUser(
     });
 
     if (emailAlreadyTaken) throw new Error("Email already taken");
-
+    await TempUserModel.deleteMany({ email });
     const verificationCode = getRandomCode(5);
     const userInfo = await TempUserModel.create({
       email,
       verificationCode,
       username,
     });
-
     await sendVerificationCode(email, verificationCode);
-
     return userInfo;
   } catch (err) {
     console.log(err);
@@ -55,14 +53,18 @@ export async function verifyTempUser(
   const { email, verificationCode } = data;
   const tempUser = await TempUserModel.findOne({ email });
   if (!tempUser) throw new Error("Could not find temp user");
-  if (verificationCode !== tempUser.verificationCode)
-    throw new Error("Could not find temp user");
+  if (verificationCode !== tempUser.verificationCode) {
+    console.log(verificationCode);
+    console.log(tempUser.verificationCode);
+    throw new Error("Wrong verification code");
+  }
   await TempUserModel.deleteMany({ email });
   return tempUser;
 }
 
 export async function createUser(data: UserInfo): Promise<UserInfo> {
-  return await UserInfoModel.create(data);
+  const createdUser = await UserInfoModel.create(data);
+  return createdUser;
 }
 
 export async function updateUserInfo(id: string, data: any): Promise<UserInfo> {

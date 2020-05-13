@@ -18,6 +18,8 @@ import {
   getUserInfoCreationData,
   formatUserInfoForResponse,
   formatTempUserInfoForResponse,
+  getJwtToken,
+  formatUserCreationInfoForResponse,
 } from "../utils";
 
 const userRouter: Router = Router();
@@ -75,8 +77,11 @@ userRouter.post(
 
       const createdUser = await createUser(userCreationData);
 
-      res.json(formatUserInfoForResponse(createdUser));
+      const jwtToken = getJwtToken(username);
+
+      res.json(formatUserCreationInfoForResponse(createdUser, jwtToken));
     } catch (err) {
+      console.log(err);
       next(createError(400, err));
     }
   }
@@ -86,7 +91,6 @@ userRouter.post(
   "/:userId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(`POST : ${JSON.stringify(req.body)}`);
       const userId = req.params.userId;
 
       res.json(

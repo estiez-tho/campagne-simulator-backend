@@ -1,6 +1,8 @@
 import { UserCreationData, UserInfo, TempUser } from "./user/model";
 import { UserItem } from "./userItem/model";
 import { Items } from "../config/items";
+import jwt from "jsonwebtoken";
+import { JwtSecret } from "../config/secret";
 
 export function getUserInfoCreationData(data: UserCreationData): UserInfo {
   let items = {};
@@ -25,13 +27,19 @@ export function getUserInfoCreationData(data: UserCreationData): UserInfo {
 }
 
 export function formatUserInfoForResponse(userInfo: UserInfo) {
-  const { amount, items } = userInfo;
-  return { amount, items };
+  return userInfo;
 }
 
 export function formatTempUserInfoForResponse(tempUser: TempUser) {
   const { email } = tempUser;
   return { email };
+}
+
+export function formatUserCreationInfoForResponse(
+  user: UserInfo,
+  token: string
+) {
+  return { user, token };
 }
 
 export function getRandomCode(length: number): string {
@@ -44,4 +52,8 @@ export function getRandomCode(length: number): string {
     res += charSet[index];
   }
   return res;
+}
+
+export function getJwtToken(username: string): string {
+  return jwt.sign({ username }, JwtSecret);
 }

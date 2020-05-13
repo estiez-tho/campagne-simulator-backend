@@ -2,12 +2,20 @@ import express, { Router, Request, Response, NextFunction } from "express";
 import createError, { HttpError } from "http-errors";
 import userRouter from "./user/router";
 import jwt from "express-jwt";
+import cookieParser from "cookie-parser";
+import morgan from "morgan";
 import { JwtSecret } from "../config/secret";
 const app: express.Application = express();
 
 app.use(express.json());
 
-//app.use(jwt({ secret: JwtSecret }).unless({ path: ["/user/create"] }));
+app.use(cookieParser());
+
+app.use(morgan());
+
+app.use(
+  jwt({ secret: JwtSecret }).unless({ path: ["/user/create", "/user/verify"] })
+);
 
 app.use("/user", userRouter);
 
