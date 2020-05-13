@@ -2,21 +2,33 @@ import { Item } from "../src/items/model";
 
 export const Items: Array<Item> = [
   {
-    name: "Item 1",
-    initialPrice: 10,
-    initialDuration: 1000,
+    name: "Crèpes",
+    initialPrice: 5,
+    initialDuration: 4000,
     initialReward: 1,
   },
   {
-    name: "Item 2",
-    initialPrice: 100,
-    initialDuration: 10000,
-    initialReward: 10,
+    name: "Fut de Kanter",
+    initialPrice: 500,
+    initialDuration: 16000,
+    initialReward: 100,
   },
   {
-    name: "Item 3",
-    initialPrice: 1000,
-    initialDuration: 100000,
-    initialReward: 100,
+    name: "Paris Sportifs",
+    initialPrice: 50000,
+    initialDuration: 32000,
+    initialReward: 10000,
+  },
+  {
+    name: "Allos Salade",
+    initialPrice: 5000000,
+    initialDuration: 64000,
+    initialReward: 1000000,
+  },
+  {
+    name: "Subvention BDE",
+    initialPrice: 500000000,
+    initialDuration: 128000,
+    initialReward: 100000000,
   },
 ];
