@@ -4,7 +4,9 @@ import userRouter from "./user/router";
 import jwt from "express-jwt";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+
 import { JwtSecret } from "../config/secret";
+
 const app: express.Application = express();
 
 app.use(express.json());
