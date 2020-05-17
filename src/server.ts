@@ -21,7 +21,7 @@ app.use(
   })
 );
 
-app.use("/status", (req: Request, res: Response, next: NextFunction) => {
+app.get("/status", (req: Request, res: Response, next: NextFunction) => {
   return res.json({ status: "ok" });
 });
 
