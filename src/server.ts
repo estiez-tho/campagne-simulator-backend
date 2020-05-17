@@ -32,7 +32,7 @@ app.use("*", (req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use((err: HttpError, req: Request, res: Response, _next: NextFunction) => {
-  res.status(err.statusCode);
+  res.status(err.statusCode || 500);
   res.json({ status: "error", message: err.message });
 });
 

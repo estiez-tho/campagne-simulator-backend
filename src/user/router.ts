@@ -126,7 +126,7 @@ userRouter.delete(
     if (userId !== tokenUserId) return next(createError(401, "Wrong token"));
     try {
       await deleteUserInfo(userId);
-      res.json({ status: "deleted" });
+      res.json({ userStatus: "deleted" });
     } catch (err) {
       next(createError(400, err));
     }
