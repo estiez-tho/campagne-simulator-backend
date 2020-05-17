@@ -30,7 +30,7 @@ export const UserInfoSchema: Schema = new Schema({
   verified: { type: Boolean, required: true },
 });
 
-export interface UserInfo extends Document {
+export interface UserInitInfo extends Document {
   username: string;
   email: string;
   amount: number;
@@ -38,12 +38,16 @@ export interface UserInfo extends Document {
   verified: boolean;
 }
 
+export interface UserInfo extends UserInitInfo {
+  _id: string;
+}
+
 export const UserInfoModel = mongoose.model<UserInfo>(
   "UserInfo",
   UserInfoSchema
 );
 
-export const UserInfoJoiSchema = Joi.object({
+export const UserInitInfoJoiSchema = Joi.object({
   username: Joi.string().required(),
   email: Joi.string().email().required(),
   amount: Joi.number().integer().required().min(0),

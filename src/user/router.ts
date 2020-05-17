@@ -5,12 +5,13 @@ import {
   updateUserInfo,
   verifyTempUser,
   createUser,
+  deleteUserInfo,
 } from "./controller";
 import {
   UserCreationDataJoiSchema,
-  UserInfoJoiSchema,
   UserVerificationDataJoiSchema,
   UserCreationData,
+  UserInitInfoJoiSchema,
 } from "./model";
 import createError from "http-errors";
 import { validateModel } from "../validation";
@@ -24,13 +25,22 @@ import {
 
 const userRouter: Router = Router();
 
+export interface JwtProtectedResponse extends Request {
+  user: {
+    username: string;
+    userId: string;
+  };
+}
+
 /**
  * GET ROUTES
  */
 userRouter.get(
   "/:userId",
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: JwtProtectedResponse, res: Response, next: NextFunction) => {
     const userId = req.params.userId;
+    const tokenUserId = req.user.userId;
+    if (userId !== tokenUserId) return next(createError(401, "Wrong token"));
     try {
       const userInfo = await getUserInfo(userId);
       res.json(formatUserInfoForResponse(userInfo));
@@ -73,11 +83,12 @@ userRouter.post(
         email,
       } as UserCreationData);
 
-      validateModel(userCreationData, UserInfoJoiSchema);
+      validateModel(userCreationData, UserInitInfoJoiSchema);
 
       const createdUser = await createUser(userCreationData);
 
-      const jwtToken = getJwtToken(username);
+      const userId = createdUser._id;
+      const jwtToken = getJwtToken(username, userId);
 
       res.json(formatUserCreationInfoForResponse(createdUser, jwtToken));
     } catch (err) {
@@ -89,13 +100,33 @@ userRouter.post(
 
 userRouter.post(
   "/:userId",
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: JwtProtectedResponse, res: Response, next: NextFunction) => {
+    const userId = req.params.userId;
+    const tokenUserId = req.user.userId;
+    if (userId !== tokenUserId) return next(createError(401, "Wrong token"));
     try {
-      const userId = req.params.userId;
-
       res.json(
         formatUserInfoForResponse(await updateUserInfo(userId, req.body))
       );
+    } catch (err) {
+      next(createError(400, err));
+    }
+  }
+);
+
+/**
+ * DELETE ROUTES
+ */
+
+userRouter.delete(
+  "/:userId",
+  async (req: JwtProtectedResponse, res: Response, next: NextFunction) => {
+    const userId = req.params.userId;
+    const tokenUserId = req.user.userId;
+    if (userId !== tokenUserId) return next(createError(401, "Wrong token"));
+    try {
+      await deleteUserInfo(userId);
+      res.json({ status: "deleted" });
     } catch (err) {
       next(createError(400, err));
     }

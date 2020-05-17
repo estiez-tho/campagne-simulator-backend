@@ -1,10 +1,15 @@
-import { UserCreationData, UserInfo, TempUser } from "./user/model";
+import {
+  UserCreationData,
+  UserInfo,
+  TempUser,
+  UserInitInfo,
+} from "./user/model";
 import { UserItem } from "./userItem/model";
 import { Items } from "../config/items";
 import jwt from "jsonwebtoken";
 import { JwtSecret } from "../config/secret";
 
-export function getUserInfoCreationData(data: UserCreationData): UserInfo {
+export function getUserInfoCreationData(data: UserCreationData): UserInitInfo {
   let items = {};
   for (let index = 0; index < Items.length; index++) {
     const name = Items[index].name;
@@ -54,6 +59,6 @@ export function getRandomCode(length: number): string {
   return res;
 }
 
-export function getJwtToken(username: string): string {
-  return jwt.sign({ username }, JwtSecret);
+export function getJwtToken(username: string, userId: string): string {
+  return jwt.sign({ username, userId }, JwtSecret);
 }

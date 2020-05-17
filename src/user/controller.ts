@@ -5,6 +5,7 @@ import {
   TempUser,
   UserCreationData,
   UserVerificationData,
+  UserInitInfo,
 } from "./model";
 
 import { sendVerificationCode } from "../mail";
@@ -62,7 +63,7 @@ export async function verifyTempUser(
   return tempUser;
 }
 
-export async function createUser(data: UserInfo): Promise<UserInfo> {
+export async function createUser(data: UserInitInfo): Promise<UserInfo> {
   const createdUser = await UserInfoModel.create(data);
   return createdUser;
 }
@@ -76,4 +77,8 @@ export async function updateUserInfo(id: string, data: any): Promise<UserInfo> {
   user.items = data.items;
 
   return await user.save();
+}
+
+export async function deleteUserInfo(_id: string): Promise<void> {
+  await UserInfoModel.deleteOne({ _id });
 }
