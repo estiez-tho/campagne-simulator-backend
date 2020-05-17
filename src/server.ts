@@ -16,8 +16,14 @@ app.use(cookieParser());
 app.use(morgan());
 
 app.use(
-  jwt({ secret: JwtSecret }).unless({ path: ["/user/create", "/user/verify"] })
+  jwt({ secret: JwtSecret }).unless({
+    path: ["/status", "/user/create", "/user/verify"],
+  })
 );
+
+app.use("/status", (req: Request, res: Response, next: NextFunction) => {
+  return res.json({ status: "ok" });
+});
 
 app.use("/user", userRouter);
 
