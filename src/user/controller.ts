@@ -35,6 +35,7 @@ export async function createTempUser(
     if (emailAlreadyTaken) throw new Error("Email already taken");
     await TempUserModel.deleteMany({ email });
     const verificationCode = getRandomCode(5);
+
     const userInfo = await TempUserModel.create({
       email,
       verificationCode,
@@ -55,8 +56,6 @@ export async function verifyTempUser(
   const tempUser = await TempUserModel.findOne({ email });
   if (!tempUser) throw new Error("Could not find temp user");
   if (verificationCode !== tempUser.verificationCode) {
-    console.log(verificationCode);
-    console.log(tempUser.verificationCode);
     throw new Error("Wrong verification code");
   }
   await TempUserModel.deleteMany({ email });

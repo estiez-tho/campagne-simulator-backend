@@ -27,7 +27,8 @@ export const UserInfoSchema: Schema = new Schema({
   email: { type: String, required: true },
   amount: { type: Number, required: true },
   items: { type: Map, of: UserItemSchema, required: true },
-  verified: { type: Boolean, required: true },
+  serverTime: { type: Date, required: true },
+  deviceTime: { type: Date, required: true },
 });
 
 export interface UserInitInfo extends Document {
@@ -35,7 +36,8 @@ export interface UserInitInfo extends Document {
   email: string;
   amount: number;
   items: { [id: string]: UserItem };
-  verified: boolean;
+  serverTime: Date;
+  deviceTime: Date;
 }
 
 export interface UserInfo extends UserInitInfo {
@@ -52,7 +54,8 @@ export const UserInitInfoJoiSchema = Joi.object({
   email: Joi.string().email().required(),
   amount: Joi.number().integer().required().min(0),
   items: Joi.object({}).pattern(Joi.string(), UserItemJoiSchema).required(),
-  verified: Joi.boolean().required(),
+  serverTime: Joi.date().required(),
+  deviceTime: Joi.date().required(),
 });
 
 export const TempUserSchema = new Schema({

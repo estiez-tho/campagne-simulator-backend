@@ -25,6 +25,11 @@ app.get("/status", (req: Request, res: Response, next: NextFunction) => {
   return res.json({ status: "ok" });
 });
 
+app.get("/time", (req: Request, res: Response, next: NextFunction) => {
+  console.log("TIME");
+  return res.json({ serverTime: new Date().getTime() });
+});
+
 app.use("/user", userRouter);
 
 app.use("*", (req: Request, res: Response, next: NextFunction) => {

@@ -28,10 +28,17 @@ export function getUserInfoCreationData(data: UserCreationData): UserInitInfo {
       numberOfReachedGoal: 0,
     } as UserItem;
   }
-  return { ...data, amount: 10, items, verified: false };
+  return {
+    ...data,
+    amount: 10,
+    items,
+    serverTime: new Date(),
+    deviceTime: new Date(),
+  };
 }
 
 export function formatUserInfoForResponse(userInfo: UserInfo) {
+  userInfo.serverTime = new Date();
   return userInfo;
 }
 
@@ -44,6 +51,7 @@ export function formatUserCreationInfoForResponse(
   user: UserInfo,
   token: string
 ) {
+  user.serverTime = new Date();
   return { user, token };
 }
 
