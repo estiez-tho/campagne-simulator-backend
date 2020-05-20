@@ -24,7 +24,7 @@ export function getUserInfoCreationData(data: UserCreationData): UserInitInfo {
       quantity: 0,
       progression: 0,
       progressionLastUpdated: new Date(),
-      nextGoal: 3,
+      nextGoal: 10,
       numberOfReachedGoal: 0,
     } as UserItem;
   }
