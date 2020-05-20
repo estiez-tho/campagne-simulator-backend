@@ -4,6 +4,7 @@ import userRouter from "./user/router";
 import jwt from "express-jwt";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+import { getRankedPlayers } from "./dashboard";
 
 import { JwtSecret } from "../config/secret";
 
@@ -17,13 +18,25 @@ app.use(morgan());
 
 app.use(
   jwt({ secret: JwtSecret }).unless({
-    path: ["/status", "/user/create", "/user/verify"],
+    path: ["/status", "/user/create", "/user/verify", "/dashboard"],
   })
 );
 
 app.get("/status", (req: Request, res: Response, next: NextFunction) => {
   return res.json({ status: "ok" });
 });
+
+app.get(
+  "/dashboard",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const playerList = await getRankedPlayers();
+      return res.json(playerList);
+    } catch (err) {
+      next(createError(500, "Could not get ranked list"));
+    }
+  }
+);
 
 app.get("/time", (req: Request, res: Response, next: NextFunction) => {
   console.log("TIME");
