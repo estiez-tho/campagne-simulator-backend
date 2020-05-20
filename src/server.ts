@@ -35,6 +35,7 @@ app.get(
       const playerList = await getRankedPlayers();
       return res.json(playerList);
     } catch (err) {
+      console.log(err);
       next(createError(500, "Could not get ranked list"));
     }
   }
