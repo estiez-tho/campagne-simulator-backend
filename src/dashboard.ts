@@ -26,8 +26,7 @@ function updateScore(userInfo: UserInfo) {
 
     const currentTime = new Date();
 
-    if (typeof progressionLastUpdated === "string")
-      progressionLastUpdated = new Date(progressionLastUpdated);
+    progressionLastUpdated = new Date(progressionLastUpdated);
 
     const deltaTime = currentTime.getTime() - progressionLastUpdated.getTime();
 
