@@ -5,7 +5,7 @@ import jwt from "express-jwt";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import { getRankedPlayers } from "./dashboard";
-
+import cors from "cors";
 import { JwtSecret } from "../config/secret";
 
 const app: express.Application = express();
@@ -15,6 +15,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(morgan());
+
+app.use(cors());
 
 app.use(
   jwt({ secret: JwtSecret }).unless({
