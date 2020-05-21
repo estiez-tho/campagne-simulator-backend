@@ -58,6 +58,12 @@ userRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       validateModel(req.body, UserCreationDataJoiSchema);
+      const { email } = req.body;
+      if (
+        email !== "thomas.estiez@gmail.com" &&
+        !email.endsWith("@etu.univ-lorraine.fr")
+      )
+        throw new Error("Addresse Mail Invalide");
 
       const createdTempUser = await createTempUser(req.body);
 
