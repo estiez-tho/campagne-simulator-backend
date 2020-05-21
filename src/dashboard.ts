@@ -6,7 +6,7 @@ export async function getRankedPlayers(): Promise<
   const playerList: Array<UserInfo> = await new Promise((resolve, reject) => {
     UserInfoModel.find({}, { _id: 0 }).exec((err, res) => {
       if (err) reject(err);
-      let mapped = res.map((elem) => updateScore(elem));
+      let mapped = res.toJSON().map((elem) => updateScore(elem));
       mapped.sort((left, right) => {
         return right.amount > left.amount ? 1 : -1;
       });
