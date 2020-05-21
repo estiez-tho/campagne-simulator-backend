@@ -3,6 +3,7 @@ import { UserItem } from "./userItem/model";
 
 export async function getRankedPlayers(): Promise<Array<string>> {
   const playerList = await UserInfoModel.find().exec((err, res) => {
+    console.log(JSON.stringify(res));
     let mapped = res.map(updateScore);
     mapped.sort((left, right) => {
       return right.amount > left.amount ? 1 : -1;
@@ -33,14 +34,8 @@ function updateScore(userInfo: UserInfo) {
     const numberOfCycles = Math.floor((progression + deltaTime) / duration);
 
     deltaAmount += quantity * reward * numberOfCycles;
-    console.log("ITEM");
-    console.log(JSON.stringify(item));
-    console.log("DELTA AMOUNT");
-    console.log(deltaAmount);
   });
   amount = amount + deltaAmount;
-  console.log("AMOUNT");
-  console.log(amount);
   return {
     username,
     amount,
