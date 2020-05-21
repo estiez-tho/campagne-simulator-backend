@@ -35,7 +35,8 @@ function updateScore(userInfo: UserInfo) {
     deltaAmount += quantity * reward * numberOfCycles;
   });
   amount = amount + deltaAmount;
-
+  console.log("AMOUNT");
+  console.log(amount);
   return {
     username,
     amount,
