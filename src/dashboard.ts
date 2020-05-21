@@ -17,7 +17,7 @@ function updateScore(userInfo: UserInfo) {
   let { username, amount } = userInfo;
   let deltaAmount = 0;
   const items = { ...userInfo.items };
-  const itemsKeys = Object.keys(items).filter((elem) => !isNaN(elem));
+  const itemsKeys = Object.keys(items).filter((elem) => "01234".includes(elem));
   itemsKeys.forEach((id: string) => {
     console.log(items[id]);
     let {
