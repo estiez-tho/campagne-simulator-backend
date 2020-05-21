@@ -27,14 +27,16 @@ function updateScore(userInfo: UserInfo) {
   `);
   let { username, amount } = userInfo;
   let deltaAmount = 0;
-  Object.values(userInfo.items).forEach((item: UserItem) => {
+
+  const items = { ...userInfo.items };
+  Object.keys(items).forEach((id: string) => {
     let {
       reward,
       quantity,
       duration,
       progression,
       progressionLastUpdated,
-    } = item;
+    } = items[id];
 
     const currentTime = new Date();
 
