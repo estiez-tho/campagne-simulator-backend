@@ -2,14 +2,13 @@ import { UserInfoModel, UserInfo } from "./user/model";
 import { UserItem } from "./userItem/model";
 
 export async function getRankedPlayers(): Promise<Array<string>> {
-  const playerList = await UserInfoModel.find().then((res) => {
-    let mapped = res.map((elem) => updateScore(elem));
-    mapped.sort((left, right) => {
-      return right.amount > left.amount ? 1 : -1;
-    });
-    return mapped;
+  const playerList = await UserInfoModel.find();
+  let mapped = playerList.map((elem) => updateScore(elem));
+
+  mapped.sort((left, right) => {
+    return right.amount > left.amount ? 1 : -1;
   });
-  return playerList;
+  return mapped;
 }
 
 function updateScore(userInfo: UserInfo) {
