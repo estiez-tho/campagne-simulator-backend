@@ -33,6 +33,10 @@ function updateScore(userInfo: UserInfo) {
     const numberOfCycles = Math.floor((progression + deltaTime) / duration);
 
     deltaAmount += quantity * reward * numberOfCycles;
+    console.log("ITEM");
+    console.log(JSON.stringify(item));
+    console.log("DELTA AMOUNT");
+    console.log(deltaAmount);
   });
   amount = amount + deltaAmount;
   console.log("AMOUNT");
