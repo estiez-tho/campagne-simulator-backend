@@ -3,16 +3,9 @@ import { UserInfoModel, UserInfo } from "./user/model";
 export async function getRankedPlayers(): Promise<
   Array<{ username: string; amount: number }>
 > {
-  const playerList: Array<UserInfo> = await new Promise((resolve, reject) => {
-    UserInfoModel.find({}, { _id: 0 }).exec((err, res) => {
-      if (err) reject(err);
-      let mapped = res.toJSON().map((elem) => updateScore(elem));
-      mapped.sort((left, right) => {
-        return right.amount > left.amount ? 1 : -1;
-      });
-      resolve(mapped);
-    });
-  });
+  const playerList = UserInfoModel.find({}, { _id: 0, username: 1, amount: 1 })
+    .sort({ amount: -1 })
+    .limit(20);
 
   return playerList;
 }
