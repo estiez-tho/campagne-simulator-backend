@@ -18,6 +18,7 @@ function updateScore(userInfo: UserInfo) {
   let deltaAmount = 0;
   const items = { ...userInfo.items };
   const itemsKeys = Object.keys(items).filter((elem) => "01234".includes(elem));
+  console.log(itemsKeys);
   itemsKeys.forEach((id: string) => {
     console.log(items[id]);
     let {
