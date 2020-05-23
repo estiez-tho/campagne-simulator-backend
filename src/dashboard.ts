@@ -1,30 +1,34 @@
 import { UserInfoModel, UserInfo } from "./user/model";
+import { UserItem } from "./userItem/model";
 
 export async function getRankedPlayers(): Promise<
   Array<{ username: string; amount: number }>
 > {
-  const playerList = UserInfoModel.find({}, { _id: 0, username: 1, amount: 1 })
-    .sort({ amount: -1 })
-    .limit(20);
+  const playerList = await UserInfoModel.find({}).lean();
+  const updatedPlayerList = playerList.map((element) => {
+    return updateScore(element);
+  });
 
-  return playerList;
+  updatedPlayerList.sort((left, right) =>
+    right.amount > left.amount ? 1 : -1
+  );
+
+  return updatedPlayerList;
 }
 
 function updateScore(userInfo: UserInfo) {
   let { username, amount } = userInfo;
   let deltaAmount = 0;
-  const items = { ...userInfo.items };
-  const itemsKeys = Object.keys(items);
-  console.log(JSON.stringify(items));
-  itemsKeys.forEach((id: string) => {
-    console.log(items[id]);
+  const items = userInfo.items;
+
+  Object.values(items).forEach((item: UserItem) => {
     let {
       reward,
       quantity,
       duration,
       progression,
       progressionLastUpdated,
-    } = items[id];
+    } = item;
 
     const currentTime = new Date();
 
